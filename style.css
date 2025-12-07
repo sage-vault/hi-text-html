@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap');
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; /* Bold font */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide scrollbars */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+header {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#typerider {
+    font-size: 2.5rem;
+    letter-spacing: 0.1em;
+    color: #0f0; /* Classic hacker green */
+    text-shadow: 0 0 10px #0f0;
+}
+
+.main-menu {
+    position: absolute;
+    top: 80px;
+    display: flex;
+    gap: 20px;
+    z-index: 10;
+}
+
+button {
+    background-color: #111;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 10px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 15px #fff;
+}
+
+.content-area {
+    width: 80%;
+    max-width: 800px;
+    height: 60%;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #fff;
+    padding: 20px;
+    overflow-y: auto; /* Allow scrolling if content is long */
+    text-align: center;
+}
+
+/* Animated Lines on the Side */
+.animated-lines {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none; /* Ignore clicks */
+}
+
+.line {
+    position: absolute;
+    width: 2px;
+    height: 80px;
+    background-color: #fff;
+    opacity: 0;
+    animation: moveAndFade 4s linear infinite;
+}
+
+/* Stagger the animation start times for each line */
+.line:nth-child(1) { animation-delay: 0s; top: 10%; }
+.line:nth-child(2) { animation-delay: 0.5s; top: 20%; }
+.line:nth-child(3) { animation-delay: 1s; top: 30%; }
+.line:nth-child(4) { animation-delay: 1.5s; top: 40%; }
+.line:nth-child(5) { animation-delay: 2s; top: 50%; }
+.line:nth-child(6) { animation-delay: 2.5s; top: 60%; }
+.line:nth-child(7) { animation-delay: 3s; top: 70%; }
+.line:nth-child(8) { animation-delay: 3.5s; top: 80%; }
+
+@keyframes moveAndFade {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(250px) translateY(150px);
+        opacity: 0;
+    }
+}
+
+/* Styling for the account checker output */
+#checkerOutput {
+    text-align: left;
+    white-space: pre-wrap; /* Keeps formatting */
+    word-wrap: break-word;
+    font-size: 0.9rem;
+}

